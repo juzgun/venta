@@ -40,7 +40,7 @@ export const CitySelector: React.FC = observer(() => {
 
   const selectOptions = optionsCities.map((city, index) => ({
     value: String(index),
-    label: `${city.name} (${city.country})`,
+    label: `${city.name} (${city.country ?? ''} ${city.region ?? ''})`,
   }));
 
   return (

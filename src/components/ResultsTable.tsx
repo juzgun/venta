@@ -20,7 +20,9 @@ const currencyFormatter = new Intl.NumberFormat('ru-RU', {
 });
 
 export const ResultsTable: React.FC = observer(() => {
-  const { ventilationStore: store } = useStores();
+  const {
+    ventilationStore: { perMonth, climateError, isLoadingClimate },
+  } = useStores();
 
   const columns: TableProps<MonthResult>['columns'] = [
     {
@@ -102,13 +104,11 @@ export const ResultsTable: React.FC = observer(() => {
 
   return (
     <Card>
-      {store.climateError && (
-        <Alert type='error' message={store.climateError} style={{ marginBottom: 16 }} />
-      )}
+      {climateError && <Alert type='error' message={climateError} style={{ marginBottom: 16 }} />}
       <Table<MonthResult>
         size='small'
-        loading={store.isLoadingClimate}
-        dataSource={store.perMonth}
+        loading={isLoadingClimate}
+        dataSource={perMonth}
         columns={columns}
         rowKey={(row) => row.monthIndex}
         pagination={false}

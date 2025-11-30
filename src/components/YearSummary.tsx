@@ -20,10 +20,11 @@ const numberFormatter = new Intl.NumberFormat('ru-RU', {
 });
 
 export const YearSummary: React.FC = observer(() => {
-  const { ventilationStore: store } = useStores();
-  const yearly = store.yearly;
+  const {
+    ventilationStore: { hasResults, yearly },
+  } = useStores();
 
-  if (!store.hasResults || !yearly) {
+  if (!hasResults || !yearly) {
     return (
       <Card>
         <Alert

@@ -5,14 +5,14 @@ import { searchCities, fetchMonthlyClimate } from '../lib/climateApi';
 
 export const defaultUserInputs: UserInputs = {
   airflow: 350,
-  indoorSetpoint: 21,
-  heatRecoveryEfficiency: 63,
+  indoorSetpoint: 20,
+  heatRecoveryEfficiency: 50,
   baseElectricityConsumptionPerMonth: 300,
   tierThresholdKWhPerMonth: 600,
   electricityPriceBelowThreshold: 5.93,
   electricityPriceAboveThreshold: 9.775,
   gasPricePerM3: 8.25,
-  heatRecoveryCapex: 150000,
+  heatRecoveryCapex: 42000,
 };
 
 export class VentilationStore {

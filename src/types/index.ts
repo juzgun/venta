@@ -3,6 +3,7 @@ export interface City {
   country: string;
   latitude: number;
   longitude: number;
+  region: string;
 }
 
 export interface MonthlyClimate {

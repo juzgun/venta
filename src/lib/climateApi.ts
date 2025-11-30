@@ -32,6 +32,7 @@ export async function searchCities(query: string): Promise<City[]> {
     country: item.country as string,
     latitude: item.latitude as number,
     longitude: item.longitude as number,
+    region: item.admin1 as string,
   }));
 
   return cities;
@@ -44,13 +45,13 @@ export async function fetchMonthlyClimate(lat: number, lon: number): Promise<Mon
   // Берём длительный период (2010–2020) для усреднения климата
   // 11 лет достаточно для сглаживания случайных аномалий и при этом даёт стабильный ответ API
   url.searchParams.set('start_date', '2010-01-01');
-  url.searchParams.set('end_date', '2020-12-31');
+  url.searchParams.set('end_date', '2021-12-31');
   url.searchParams.set('daily', 'temperature_2m_mean');
   url.searchParams.set('timezone', 'GMT');
 
   const res = await fetch(url.toString());
   if (!res.ok) {
-    throw new Error('Failed to fetch climate data');
+    throw new Error('Ошибка при загрузке данных о климатических условиях');
   }
 
   const data = await res.json();
@@ -65,7 +66,7 @@ export async function fetchMonthlyClimate(lat: number, lon: number): Promise<Mon
     times.length !== temps.length ||
     times.length === 0
   ) {
-    throw new Error('Invalid climate data');
+    throw new Error('Некорректные данные о климатических условиях');
   }
 
   const sums = new Array<number>(12).fill(0);

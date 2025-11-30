@@ -9,7 +9,9 @@ const { Title } = Typography;
 type FormValues = UserInputs;
 
 export const InputsForm: React.FC = observer(() => {
-  const { ventilationStore: store } = useStores();
+  const {
+    ventilationStore: { setUserInput, userInputs },
+  } = useStores();
 
   const [form] = Form.useForm<FormValues>();
 
@@ -17,7 +19,7 @@ export const InputsForm: React.FC = observer(() => {
     (Object.keys(allValues) as (keyof FormValues)[]).forEach((key) => {
       const value = allValues[key];
       if (value !== undefined) {
-        store.setUserInput(key, value);
+        setUserInput(key, value);
       }
     });
   };
@@ -28,7 +30,7 @@ export const InputsForm: React.FC = observer(() => {
       <Form<FormValues>
         layout='vertical'
         form={form}
-        initialValues={store.userInputs}
+        initialValues={userInputs}
         onValuesChange={handleValuesChange}
       >
         <Row gutter={16}>
@@ -64,11 +66,11 @@ export const InputsForm: React.FC = observer(() => {
           </Col>
           <Col span={12}>
             <Form.Item
-              label='Базовое потребление дома, кВт·ч/мес'
+              label='Базовое потребление дома (Вент. установки), кВт·ч/мес'
               name='baseElectricityConsumptionPerMonth'
               rules={[{ required: true, message: 'Укажите базовое потребление' }]}
             >
-              <InputNumber min={0} max={5000} step={10} style={{ width: '100%' }} />
+              <InputNumber min={0} max={100000} step={10} style={{ width: '100%' }} />
             </Form.Item>
           </Col>
         </Row>
@@ -106,7 +108,7 @@ export const InputsForm: React.FC = observer(() => {
           </Col>
           <Col span={12}>
             <Form.Item
-              label='Цена газа, ₽/м³'
+              label='Цена природного газа, ₽/м³'
               name='gasPricePerM3'
               rules={[{ required: true, message: 'Укажите цену газа' }]}
             >
