@@ -23,11 +23,11 @@ const App: React.FC = () => {
       </Header>
       <Content className="app-content">
         <Row gutter={24}>
-          <Col xs={24} md={10} lg={6}>
+          <Col xs={24} md={10} lg={4}>
             <CitySelector />
             <InputsForm />
           </Col>
-          <Col xs={24} md={14} lg={18}>
+          <Col xs={24} md={14} lg={20}>
             <div style={{ marginBottom: 24 }}>
               <ResultsTable />
             </div>
