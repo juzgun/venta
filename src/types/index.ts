@@ -22,6 +22,10 @@ export interface UserInputs {
   electricityPriceAboveThreshold: number; // RUB/kWh
   gasPricePerM3: number; // RUB/m³
   heatRecoveryCapex?: number; // RUB, optional
+  // Cooling season parameters
+  coolingCOP: number; // Coefficient of Performance for AC
+  coolingHoursPerDay: number; // hours/day
+  coolingDaysPerSeason: number; // days in cooling season
 }
 
 export interface MonthResult {

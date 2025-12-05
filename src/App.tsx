@@ -4,6 +4,7 @@ import { CitySelector } from "./components/CitySelector";
 import { InputsForm } from "./components/InputsForm";
 import { ResultsTable } from "./components/ResultsTable";
 import { YearSummary } from "./components/YearSummary";
+import { CoolingSavingsCalculator } from "./components/CoolingSavingsCalculator";
 import "./index.css";
 
 const { Header, Content } = Layout;
@@ -22,15 +23,18 @@ const App: React.FC = () => {
       </Header>
       <Content className="app-content">
         <Row gutter={24}>
-          <Col xs={24} md={10} lg={8}>
+          <Col xs={24} md={10} lg={6}>
             <CitySelector />
             <InputsForm />
           </Col>
-          <Col xs={24} md={14} lg={16}>
+          <Col xs={24} md={14} lg={18}>
             <div style={{ marginBottom: 24 }}>
               <ResultsTable />
             </div>
-            <YearSummary />
+            <div style={{ marginBottom: 24 }}>
+              <YearSummary />
+            </div>
+            <CoolingSavingsCalculator />
           </Col>
         </Row>
       </Content>

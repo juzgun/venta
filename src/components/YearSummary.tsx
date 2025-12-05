@@ -21,7 +21,7 @@ const numberFormatter = new Intl.NumberFormat('ru-RU', {
 
 export const YearSummary: React.FC = observer(() => {
   const {
-    ventilationStore: { hasResults, yearly },
+    ventilationStore: { hasResults, yearly, coolingSavings, userInputs },
   } = useStores();
 
   if (!hasResults || !yearly) {
@@ -45,9 +45,17 @@ export const YearSummary: React.FC = observer(() => {
     gasCostNoRecYear,
     gasCostWithRecYear,
     costPerKWhGas,
-    paybackYearsElectric,
     paybackYearsGas,
   } = yearly;
+
+  // Calculate combined payback including cooling savings
+  const coolingSavingsSeason = coolingSavings?.savingsSeason ?? 0;
+  const totalElectricMoneySaved = electricMoneySaved + coolingSavingsSeason;
+  
+  let paybackYearsElectricCombined: number | undefined;
+  if (userInputs.heatRecoveryCapex && totalElectricMoneySaved > 0) {
+    paybackYearsElectricCombined = userInputs.heatRecoveryCapex / totalElectricMoneySaved;
+  }
 
   return (
     <Card>
@@ -87,10 +95,29 @@ export const YearSummary: React.FC = observer(() => {
         </Col>
         <Col xs={24} md={12}>
           <Statistic
-            title='Экономия на электричестве, ₽/год'
+            title='Экономия на нагрев вентиляции (эл-во), ₽/год'
             value={currencyFormatter.format(electricMoneySaved)}
           />
         </Col>
+
+        {coolingSavingsSeason > 0 && (
+          <Col xs={24} md={12}>
+            <Statistic
+              title='Экономия на охлаждении, ₽/год'
+              value={currencyFormatter.format(coolingSavingsSeason)}
+            />
+          </Col>
+        )}
+
+        {coolingSavingsSeason > 0 && (
+          <Col xs={24} md={12}>
+            <Statistic
+              title='Общая экономия (подогрев воздуха + охлаждение), ₽/год'
+              value={currencyFormatter.format(totalElectricMoneySaved)}
+              valueStyle={{ color: '#52c41a', fontWeight: 'bold' }}
+            />
+          </Col>
+        )}
 
         <Col xs={24} md={12}>
           <Statistic
@@ -112,11 +139,15 @@ export const YearSummary: React.FC = observer(() => {
           />
         </Col>
 
-        {paybackYearsElectric !== undefined && (
+        {paybackYearsElectricCombined !== undefined && (
           <Col xs={24} md={12}>
             <Statistic
-              title='Срок окупаемости рекуператора (ЭЛЕКТРИЧЕСТВО), лет'
-              value={numberFormatter.format(paybackYearsElectric)}
+              title={coolingSavingsSeason > 0 
+                ? 'Срок окупаемости (ЭЛЕКТРИЧЕСТВО, нагрев вентиляции + охлаждение), лет'
+                : 'Срок окупаемости рекуператора (ЭЛЕКТРИЧЕСТВО), лет'
+              }
+              value={numberFormatter.format(paybackYearsElectricCombined)}
+              valueStyle={{ color: '#1890ff', fontWeight: 'bold' }}
             />
           </Col>
         )}

@@ -1,10 +1,10 @@
 import { makeAutoObservable } from 'mobx';
 import type { MonthlyClimate, UserInputs, MonthResult, YearSummary, City } from '../types';
-import { calculateVentilationEnergy } from '../lib/calculations';
+import { calculateVentilationEnergy, calculateCoolingSavings, type CoolingSavingsResult } from '../lib/calculations';
 import { searchCities, fetchMonthlyClimate } from '../lib/climateApi';
 
 export const defaultUserInputs: UserInputs = {
-  airflow: 350,
+  airflow: 320,
   indoorSetpoint: 20,
   heatRecoveryEfficiency: 50,
   baseElectricityConsumptionPerMonth: 300,
@@ -13,6 +13,10 @@ export const defaultUserInputs: UserInputs = {
   electricityPriceAboveThreshold: 9.775,
   gasPricePerM3: 8.25,
   heatRecoveryCapex: 42000,
+  // Cooling season defaults
+  coolingCOP: 3.2,
+  coolingHoursPerDay: 24,
+  coolingDaysPerSeason: 90,
 };
 
 export class VentilationStore {
@@ -78,5 +82,11 @@ export class VentilationStore {
   // computed helpers
   get hasResults() {
     return !!this.yearly && this.perMonth.length > 0;
+  }
+
+  // Cooling savings computed
+  get coolingSavings(): CoolingSavingsResult | null {
+    if (!this.monthlyClimate.length) return null;
+    return calculateCoolingSavings(this.monthlyClimate, this.userInputs);
   }
 }
